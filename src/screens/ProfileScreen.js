@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNickname } from '../redux/slices/userSlice';
+import Share from 'react-native-share';
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
@@ -40,8 +41,18 @@ const ProfileScreen = () => {
         );
     };
 
-    const handleShare = () => {
-        Alert.alert('Share', 'Share feature not implemented yet 🚀');
+
+    const handleShare = async () => {
+        const shareOptions = {
+            title: 'Share app',
+            message: 'Hi! Try this cool app 🚀',
+        };
+
+        try {
+            await Share.open(shareOptions);
+        } catch (error) {
+            console.log('Ошибка при попытке поделиться:', error);
+        }
     };
 
     const handleSave = () => {
@@ -94,17 +105,6 @@ const ProfileScreen = () => {
             </View>
 
             <View style={styles.divider} />
-
-            {/* Notifications */}
-            <View style={styles.row}>
-                <Text style={styles.rowLabel}>Notifications</Text>
-                <Switch
-                    value={notificationsEnabled}
-                    onValueChange={handleToggleNotifications}
-                    trackColor={{ false: '#ccc', true: '#f44336' }}
-                    thumbColor="#fff"
-                />
-            </View>
 
             {/* Share */}
             <TouchableOpacity style={styles.row} onPress={handleShare}>

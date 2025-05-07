@@ -14,7 +14,7 @@ const MoreInfoScreen = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image source={item.image } style={styles.image} />
 
             <TouchableOpacity
                 style={styles.backButton}
