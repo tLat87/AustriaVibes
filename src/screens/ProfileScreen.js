@@ -12,6 +12,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { setNickname } from '../redux/slices/userSlice';
 import Share from 'react-native-share';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
@@ -60,10 +61,31 @@ const ProfileScreen = () => {
         setIsEditing(false);
     };
 
+    const handleAvatarPress = () => {
+        launchImageLibrary(
+            {
+                mediaType: 'photo',
+                quality: 0.8,
+                selectionLimit: 1,
+            },
+            response => {
+                if (response.didCancel) return;
+
+                if (response.assets && response.assets.length > 0) {
+                    const selectedImage = response.assets[0];
+                    dispatch(setNickname({ nickname, avatar: selectedImage.uri }));
+                } else {
+                    Alert.alert('Error', 'Could not get the image');
+                }
+            }
+        );
+    };
+
+
     return (
         <View style={styles.container}>
             {/* Avatar */}
-            <TouchableOpacity style={styles.avatarContainer}>
+            <TouchableOpacity style={styles.avatarContainer} onPress={handleAvatarPress}>
                 <View style={styles.avatarCircle}>
                     {avatar ? (
                         <Image source={{ uri: avatar }} style={styles.avatarImage} />
